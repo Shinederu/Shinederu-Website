@@ -13,7 +13,7 @@ const Homepage = () => {
             <p>Si t'aime bien mes lives j'ai une bonne nouvelle pour toi ! L'intégralité des streams que j'ai réalisé sont
                 disponible sur YouTube ! Te laissant ainsi l'opportunité d'en profiter un nombre incalculable de fois et même de
                 laisser ton avis sur certains éléments en commentaire. </p>
-            <img src="images/accueil/ShineChibi.png" alt="Image de moi en Chibi (IA)" width="400" id="img-accueil-ShineChibi" />
+            <img src="/img/ShineChibi.png" alt="Image de moi en Chibi (IA)" width="400" id="img-accueil-ShineChibi" />
         </>
     );
 };
