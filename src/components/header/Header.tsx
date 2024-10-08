@@ -1,7 +1,6 @@
 import { headerMenus } from "@/constants/header/header-menus";
-import { AuthContext } from "@/shared/context/AuthContext";
 import { cn, Navbar, NavbarContent, NavbarItem, NavbarMenu, NavbarMenuItem, NavbarMenuToggle } from "@nextui-org/react";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
@@ -12,7 +11,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 const Header = () => {
 
     const { t } = useTranslation();
-    const authCtx = useContext(AuthContext);
     const navigate = useNavigate();
     const loc = useLocation();
 
