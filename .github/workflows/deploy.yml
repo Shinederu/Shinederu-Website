@@ -29,8 +29,10 @@ jobs:
         SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
       run: |
         mkdir -p ~/.ssh
-        echo "$SSH_RUNGET_CREDENTIALS_DIRECTORY_DETECTED
-    
+        echo "${SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        eval "$(ssh-agent -s)"
+        ssh-add ~/.ssh/id_rsa
 
     - name: Test SSH Connection
       run: |
