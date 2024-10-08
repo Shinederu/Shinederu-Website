@@ -16,7 +16,7 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '20'  # Assurez-vous que cette version correspond à celle utilisée en local
+        node-version: '20'
 
     - name: Install dependencies
       run: npm install
@@ -32,3 +32,4 @@ jobs:
         key: ${{ secrets.SERVER_SSH_KEY }}
         source: './dist/*'
         target: '/var/www/shinederu.lol/html/'
+        timeout: 30s
