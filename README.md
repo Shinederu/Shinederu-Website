@@ -1,2 +1,1 @@
-# Shinederu-Website
-Site internet du Streamer Shinederu
+# Shinederu client 1.0.0
