@@ -24,19 +24,16 @@ jobs:
     - name: Build application
       run: npm run build
 
-    - name: Add SSH Key to SSH Agent
+    - name: Add SSH Key for Deployment
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
       run: |
         mkdir -p ~/.ssh
-        echo "${SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        eval "$(ssh-agent -s)"
-        ssh-add ~/.ssh/id_rsa
 
     - name: Test SSH Connection
-      run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "echo 'SSH connection successful'"
+      run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "echo 'SSH connection successful'"
 
     - name: Deploy to Server via SCP
       uses: appleboy/scp-action@v0.1.0
@@ -50,5 +47,4 @@ jobs:
         debug: true
 
     - name: Verify Deployment (optional)
-      run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "ls -la /var/www/shinederu.lol/html"
+      run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "ls -la /var/www/shinederu.lol/html"
