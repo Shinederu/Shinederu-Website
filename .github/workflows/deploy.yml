@@ -24,6 +24,13 @@ jobs:
     - name: Build application
       run: npm run build
 
+    - name: Verify SSH Connection
+      run: |
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "echo 'SSH connection successful'"
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
+      shell: bash
+
     - name: Deploy to Server via SCP
       uses: appleboy/scp-action@v0.1.0
       with:
