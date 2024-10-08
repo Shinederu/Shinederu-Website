@@ -20,7 +20,7 @@ const Header = () => {
 
 
     return (
-        <header className="">
+        <header className="bg-indigo-900 text-gray-50">
             <Navbar onMenuOpenChange={setIsMenuOpen} isMenuOpen={isMenuOpen}>
                 <NavbarContent>
                     <NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} className="xl:hidden" />
