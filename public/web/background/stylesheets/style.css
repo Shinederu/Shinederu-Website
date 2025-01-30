@@ -1,0 +1,10 @@
+html, body {
+  overflow: hidden;
+  height: 100%; /* Pour éviter tout scrolling supplémentaire */
+}
+body {
+  background-image: url('/web/background/pictures/Background.png'); /* Image de fond */
+  background-position: center center; /* Image centrée horizontalement et verticalement */
+  background-attachment: fixed; /* Image fixe lors du défilement */
+  background-size: cover; /* L'image couvre toute la taille de l'écran */
+}
