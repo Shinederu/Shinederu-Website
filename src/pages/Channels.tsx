@@ -1,5 +1,5 @@
-import TwitchEmbed from "@/components/TwitchEmbed";
-import YouTubeVideos from "@/components/YouTubeVideos";
+import TwitchEmbed from "@/components/Integrations/TwitchEmbed";
+import YouTubeVideos from "@/components/Integrations/YouTubeVideos";
 
 const Channels = () => {
     return (
