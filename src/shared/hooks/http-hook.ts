@@ -11,28 +11,41 @@ export const useHttpClient = () => {
             url,
             method = 'GET',
             body = null,
-            headers = { 'Content-Type': 'application/json' },
+            headers = {},
             onError,
             onSuccess,
         }: {
             key: number;
-            url: string; // URL complète pour la requête
-            method?: string;
-            body?: string | null;
+            url: string;
+            method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
+            body?: any;
             headers?: Record<string, string>;
-            onError?: (error: string) => void; // Callback en cas d'erreur
-            onSuccess?: (data: any) => void; // Callback en cas de succès
+            onError?: (error: string) => void;
+            onSuccess?: (data: any) => void;
         }) => {
             setIsLoading((prev) => ({ ...prev, [key]: true }));
             const httpAbortCtrl = new AbortController();
             activeHttpRequests.current[key] = httpAbortCtrl;
 
             try {
-                const response = await fetch(url, {
+                let requestUrl = url;
+                if (method === 'GET' && body && typeof body === 'object') {
+                    const params = new URLSearchParams(body).toString();
+                    requestUrl = `${url}?${params}`;
+                }
+
+                const isJson = body && !(body instanceof FormData);
+                const finalHeaders: HeadersInit = { 'Accept': 'application/json', ...headers };
+                if (isJson) {
+                    finalHeaders['Content-Type'] = 'application/json';
+                }
+
+                const response = await fetch(requestUrl, {
                     method,
-                    body: body ? JSON.stringify(body) : null,
-                    headers,
+                    body: method !== 'GET' ? (isJson ? JSON.stringify(body) : body) : null,
+                    headers: finalHeaders,
                     signal: httpAbortCtrl.signal,
+                    credentials: "include",
                 });
 
                 const responseData = await response.json();
@@ -40,22 +53,24 @@ export const useHttpClient = () => {
                 if (!response.ok) {
                     const errorMessage = responseData.message || 'Une erreur est survenue';
                     setErrors((prev) => ({ ...prev, [key]: errorMessage }));
-                    onError?.(errorMessage); // Appel de la callback d'erreur si définie
+                    onError?.(errorMessage);
                     return null;
                 }
 
                 setErrors((prev) => ({ ...prev, [key]: null }));
-                onSuccess?.(responseData); // Appel de la callback de succès si définie
+                onSuccess?.(responseData);
                 return responseData;
             } catch (err: any) {
                 if (err.name !== 'AbortError') {
                     const errorMessage = err.message || 'Erreur inconnue';
                     setErrors((prev) => ({ ...prev, [key]: errorMessage }));
-                    onError?.(errorMessage); // Appel de la callback d'erreur si définie
+                    onError?.(errorMessage);
                 }
                 return null;
             } finally {
-                delete activeHttpRequests.current[key];
+                if (activeHttpRequests.current[key]) {
+                    delete activeHttpRequests.current[key];
+                }
                 setIsLoading((prev) => ({ ...prev, [key]: false }));
             }
         },
@@ -70,29 +85,3 @@ export const useHttpClient = () => {
 
     return { isLoading, errors, sendRequest };
 };
-
-
-
-{/*Exemple d'utilisation:
-    
-    
-    
-  const { sendRequest, isLoading, errors } = useHttpClient();
-
-  const fetchData = () => {
-    sendRequest({
-      key: 1,
-      url: 'https://api.shinederu.lol/api/example',
-      method: 'POST',
-      body: name: 'Test',
-      onError: (error) => {
-        console.error('Erreur capturée :', error);
-        alert(`Erreur : ${error}`);
-      },
-      onSuccess: (data) => {
-        console.log('Succès, données reçues :', data);
-      },
-    });
-  };
-    
-*/}

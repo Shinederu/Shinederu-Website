@@ -2,7 +2,7 @@
   "name": "shinederu-lol",
   "homepage": ".",
   "private": true,
-  "version": "0.0.0.1",
+  "version": "0.1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host",
@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "axios": "^1.7.9",
+    "lucide-react": "^0.474.0",
     "path": "^0.12.7",
     "postcss": "^8.5.1",
     "react": "^18.3.1",
