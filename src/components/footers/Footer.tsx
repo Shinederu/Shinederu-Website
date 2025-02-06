@@ -2,11 +2,11 @@
 
 const Footer = () => {
   return (
-    <footer className="mt-12 py-4 bg-black text-white relative">
-      <div className="absolute left-4 bottom-4 text-sm text-gray-400">
+    <footer className="text-center py-5 bg-[#1a1a1a] mt-8 text-gray-400 text-sm mx">
+      <div>
         Version : {import.meta.env.VITE_SHINEDERU_VERSION}
       </div>
-      <p className="text-center">
+      <p>
         &copy; 2025 <a href="https://shinederu.lol" target="_blank" rel="noopener noreferrer" className="hover:underline">Shinederu.lol</a> - Tous droits réservés
       </p>
     </footer>

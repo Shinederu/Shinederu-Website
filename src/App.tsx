@@ -1,6 +1,6 @@
 import { Routes } from "react-router-dom";
 import { getRoutes } from "./utils/routes";
-import Header from "./components/herders/Header";
+import Header from "./components/headers/Header";
 import Footer from "./components/footers/Footer";
 import { useHttpClient } from "./shared/hooks/http-hook";
 import { useContext, useEffect } from "react";
@@ -44,26 +44,15 @@ const App = () => {
 
 
   return (
-    <>
-      <div className="min-h-screen w-full relative">
-        <iframe
-          src="/web/background/index.html"
-          className="fixed top-0 left-0 w-full h-full"
-          style={{ zIndex: -1 }}
-          allow="fullscreen"
-        ></iframe>
-        <Header />
-        {/* Le Header et le Footer sont affichés conditionnellement en fonction de si l'utilisateur est autorisé à utiliser NetViewer */}
-        <main className="min-h-[calc(100dvh-64px)]">
-          <Routes>
-            {getRoutes()}
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </>
-
+    <div className="bg-[#0d0d0d] text-white font-[Poppins] min-h-screen flex flex-col">
+      <Header />
+      <main className="w-11/12 mx-auto my-10 p-8 bg-[#1e1e1e] rounded-lg shadow-lg text-center flex-grow">
+        <Routes>{getRoutes()}</Routes>
+      </main>
+      <Footer />
+    </div>
   );
+
 };
 
 export default App;

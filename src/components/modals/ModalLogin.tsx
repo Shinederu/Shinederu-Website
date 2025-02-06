@@ -94,9 +94,7 @@ const ModalLogin = () => {
         <div>
             {/* Bouton pour ouvrir la modal */}
             <button
-                onClick={() => setIsOpen(true)}
-                className="px-4 py-2 bg-purple-600 text-white rounded-lg shadow-md hover:bg-purple-700 transition"
-            >
+                onClick={() => setIsOpen(true)}            >
                 Connexion/Inscription
             </button>
 
