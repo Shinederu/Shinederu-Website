@@ -3,13 +3,16 @@ import { getRoutes } from "./utils/routes";
 import Header from "./components/herders/Header";
 import Footer from "./components/footers/Footer";
 import { useHttpClient } from "./shared/hooks/http-hook";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "./shared/context/AuthContext";
+import ModalError from "./components/modals/ModalError";
 
 const App = () => {
 
   const { sendRequest } = useHttpClient();
   const authCtx = useContext(AuthContext);
+  const [errorIsOpen, setErrorIsOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
 
   useEffect(() => {
@@ -25,14 +28,16 @@ const App = () => {
               authCtx.setMail(data.user.email);
               authCtx.setPseudo(data.user.username);
               authCtx.setPk(data.user.pk);
+              authCtx.setPermission(data.user.permission);
               authCtx.setToken(data.token);
-              console.log("Mise à jour du contexte, isLoggedIn:", true)
             } else {
               authCtx.setIsLoggedIn(false);
-              console.log("Mise à jour du contexte, isLoggedIn:", false)
             }
           },
-          onError: (error) => alert(`Erreur : ${error}`),
+          onError: () => {
+            setErrorMessage("Impossible de contacter le serveur... Réessayer plus tard !"); // Stocke le message d'erreur
+            setErrorIsOpen(true); // Ouvre la modale
+          },
         });
       } catch (error) {
         console.error("Erreur lors de la vérification de la connexion :", error);
@@ -56,11 +61,18 @@ const App = () => {
         {/* Le Header et le Footer sont affichés conditionnellement en fonction de si l'utilisateur est autorisé à utiliser NetViewer */}
         <main className="min-h-[calc(100dvh-64px)]">
           <Routes>
-            {getRoutes()}
+            {getRoutes(authCtx.permission)}
           </Routes>
         </main>
         <Footer />
       </div>
+      {errorIsOpen && (
+        <ModalError
+          isOpen={errorIsOpen}
+          message={errorMessage}
+          setIsOpen={setErrorIsOpen}
+        />
+      )}
     </>
 
   );
