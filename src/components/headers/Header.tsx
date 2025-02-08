@@ -3,36 +3,41 @@ import ModalLogin from "../modals/ModalLogin";
 import { useHttpClient } from "@/shared/hooks/http-hook";
 import { useContext } from "react";
 import { AuthContext } from "@/shared/context/AuthContext";
+import ModalError from "../modals/ModalError";
 
 const Header = () => {
 
   const { sendRequest } = useHttpClient();
   const authCtx = useContext(AuthContext);
+  const [errorIsOpen, setErrorIsOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  console.log("isLoggedIn dans le Header:", authCtx.isLoggedIn);
 
   const sendLogout = async () => {
     try {
       await sendRequest({
         key: 3,
-        url: import.meta.env.VITE_SHINEDERU_API_URL + '/auth/logout',
-        method: 'POST',
+        url: import.meta.env.VITE_SHINEDERU_API_URL + "/auth/logout",
+        method: "POST",
         headers: { Authorization: authCtx.token },
         onSuccess: () => {
           authCtx.setIsLoggedIn(false);
-          authCtx.setMail('');
-          authCtx.setPseudo('');
+          authCtx.setMail("");
+          authCtx.setPseudo("");
           authCtx.setPk(0);
-          authCtx.setToken('');
+          authCtx.setToken("");
+          authCtx.setPermission(0);
         },
-        onError: (error) => alert(`Erreur : ${error}`),
+        onError: (error) => {
+          setErrorMessage(error); // Stocke le message d'erreur
+          setErrorIsOpen(true); // Ouvre la modale
+        },
+
       });
     } catch (error) {
       alert(`Erreur : ${error}`);
     }
   };
-
-
 
   return (
     <>
@@ -62,12 +67,15 @@ const Header = () => {
         {/* Bouton connexion à droite */}
 
       </header>
+            </div>
+      {errorIsOpen && (
+        <ModalError
+          isOpen={errorIsOpen}
+          message={errorMessage}
+          setIsOpen={setErrorIsOpen}
+        />
     </>
   );
 };
 
 export default Header;
-
-
-
-

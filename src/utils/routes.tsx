@@ -1,7 +1,9 @@
 import AboutMe from "@/pages/AboutMe";
 import Channels from "@/pages/Channels";
 import Community from "@/pages/Community";
+import Dashboard from "@/pages/Dashboard";
 import Homepage from "@/pages/Homepage";
+import Profile from "@/pages/Profile";
 import { Route } from "react-router-dom";
 
 
@@ -15,6 +17,24 @@ const anonymous = () => (
     </>
 )
 
-export const getRoutes = () => {
+
+const logged = () => (
+    <>
+        {anonymous()}
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/profile" element={<Profile />} />
+
+    </>
+)
+
+export const getRoutes = (permission: number) => {
+    switch (permission) {
+        case 1: //Cas utilisateur
+            return logged();
+        default: //Cas visiteur
+            return anonymous();
+    }
+
+
     return anonymous();
 };
