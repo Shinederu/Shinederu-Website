@@ -104,26 +104,47 @@ const ModalLogin = () => {
     };
 
     return (
-        <>
-            <div>
-                {/* Bouton pour ouvrir la modal */}
-                <button
-                    onClick={() => setIsOpen(true)}
-                    className="px-4 py-2 bg-purple-600 text-white rounded-lg shadow-md hover:bg-purple-700 transition"
-                >
-                    Connexion/Inscription
-                </button>
+        <div>
+            {/* Bouton pour ouvrir la modal */}
+            <button
+                onClick={() => setIsOpen(true)}            >
+                Connexion/Inscription
+            </button>
 
-                {/* Modal */}
-                {isOpen && (
-                    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
-                        <div className="bg-white text-black rounded-lg shadow-lg w-full max-w-4xl border border-gray-300">
-                            {/* Header */}
-                            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-300">
-                                <h2 className="text-xl font-bold">Connexion / Inscription</h2>
-                                <button onClick={() => setIsOpen(false)} className="text-gray-600 hover:text-black transition">
-                                    <X size={20} />
-                                </button>
+            {/* Modal */}
+            {isOpen && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+                    <div className="bg-white text-black rounded-lg shadow-lg w-full max-w-4xl border border-gray-300">
+                        {/* Header */}
+                        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-300">
+                            <h2 className="text-xl font-bold">Connexion / Inscription</h2>
+                            <button onClick={() => setIsOpen(false)} className="text-gray-600 hover:text-black transition">
+                                <X size={20} />
+                            </button>
+                        </div>
+
+                        {/* Body */}
+                        <div className="p-6 grid grid-cols-2 gap-6">
+                            {/* Connexion */}
+                            <div className="bg-slate-100 p-4 rounded-md">
+                                <h3 className="text-lg font-semibold mb-4">Connexion</h3>
+                                <form>
+                                    <input
+                                        type="text"
+                                        name="loginUsername"
+                                        placeholder="Pseudo ou Email"
+                                        value={formData.loginUsername}
+                                        onChange={handleChange}
+                                        className="w-full p-2 border rounded mb-2" />
+                                    <input
+                                        type="password"
+                                        name="loginPassword"
+                                        placeholder="Mot de passe"
+                                        value={formData.loginPassword}
+                                        onChange={handleChange}
+                                        className="w-full p-2 border rounded mb-4" />
+                                </form>
+
                             </div>
 
                             {/* Body */}
