@@ -1,60 +1,63 @@
-import TwitchEmbed from "@/components/Integrations/TwitchEmbed";
-import YouTubeVideos from "@/components/Integrations/YouTubeVideos";
+import Title from "@/components/decoration/Title";
+import TwitchEmbed from "@/components/integrations/TwitchEmbed";
+import YouTubeEmbed from "@/components/integrations/YouTubeEmbed";
+
 
 const Channels = () => {
     return (
         <>
-            <main className="text-white py-10 px-4">
-                {/* Section Twitch */}
-                <section className="mb-12">
-                    <div className="max-w-4xl mx-auto bg-black bg-opacity-50 p-6 rounded-lg shadow-lg">
-                        <h2 className="text-2xl font-bold">Twitch</h2>
-                        <p className="mt-2">
-                            Si tu souhaites regarder mes streams en direct, tout se passe sur Twitch !
-                        </p>
-                        <div className="mt-4">
-                            <TwitchEmbed />
-                        </div>
-                        <p className="mt-4">
-                            Comme je n'ai pas de planning, il faut rester connecté pour ne rien louper !
-                        </p>
-                        <div className="mt-4 text-center">
-                            <a
-                                href={import.meta.env.VITE_TWITCH_CHANNEL_LINK}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-block px-6 py-3 bg-purple-600 rounded-lg text-white hover:bg-purple-500"
-                            >
-                                Voir la chaîne Twitch
-                            </a>
-                        </div>
-                    </div>
-                </section>
+            {/* Section Twitch */}
+            <section className="border-b-4 border-[#6b6b6b] pb-12 mb-4 inline-block w-11/12">
 
-                {/* Section YouTube */}
-                <section>
-                    <div className="max-w-4xl mx-auto bg-black bg-opacity-50 p-6 rounded-lg shadow-lg">
-                        <h2 className="text-2xl font-bold">YouTube</h2>
-                        <p className="mt-2">
-                            Retrouve ici les huit dernières rediffusions postées sur YouTube ! Le reste est disponible sur la chaîne !
-                        </p>
-                        <div className="mt-4">
-                            <YouTubeVideos />
-                        </div>
-                        <div className="mt-4 text-center">
-                            <a
-                                href={import.meta.env.VITE_YOUTUBE_CHANNEL_LINK}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-block px-6 py-3 bg-red-600 rounded-lg text-white hover:bg-red-500"
-                            >
-                                Voir la chaîne Twitch
-                            </a>
-                        </div>
+                <Title title="Twitch" size={2} />
+                <p>
+                    Si tu souhaites regarder mes streams en direct, tout se passe sur Twitch !
+                </p>
+                <TwitchEmbed />
+                <div className="flex flex-col items-center bg-[#10101f] p-6 rounded-xl border-2  border-[#6a11cb]">
+                    <p>
+                        Comme je n'ai pas de planning, il faut rester connecté pour ne rien louper ! Mais bon... qui sait, peut-être que j'en aurais un... un jour... ou l'autre...<br></br>
+                        <i>(Astuce: Tu peux activer les notifs pour savoir si je lance un live !)</i>
+                    </p>
+                    <div className="mt-4 text-center">
+                        <a
+                            href={import.meta.env.VITE_TWITCH_CHANNEL_LINK}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="bg-gradient-to-r from-[#6a11cb] to-[#2575fc] py-3 px-5 mt-4 rounded-md font-bold transition-transform duration-200 hover:scale-105"
+                        >
+                            Voir la chaîne Twitch
+                        </a>
                     </div>
-                </section>
-            </main>
+                </div>
+            </section >
 
+
+            {/* Section YouTube */}
+            <section className="pb-6 mb-4 inline-block w-11/12">
+
+                <Title title="YouTube" size={2} />
+                <p>
+                    Si tu souhaites regarder mes streams en direct, tout se passe sur Twitch !
+                </p>
+                <YouTubeEmbed />
+                <div className="flex flex-col items-center bg-[#10101f] p-6 rounded-xl border-2  border-[#cb1111]">
+                    <p>
+                        T'as loupé un live ? T'inquiètes pas ! Tout mes lives sont disponibles sur YouTube !<br></br>
+                        <i>(Oui c'est simplement une image au dessus (j'ai pas trouvé une intégration qui fonctionne))</i>
+                    </p>
+                    <div className="mt-4 text-center">
+                        <a
+                            href={import.meta.env.VITE_YOUTUBE_CHANNEL_LINK}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="bg-gradient-to-r from-[#6a11cb] to-[#2575fc] py-3 px-5 mt-4 rounded-md font-bold transition-transform duration-200 hover:scale-105"
+                        >
+                            Voir la chaîne YouTube
+                        </a>
+                    </div>
+                </div>
+            </section >
         </>
     );
 };
