@@ -2,41 +2,34 @@ import { useEffect } from "react";
 
 const TwitchEmbed = () => {
   useEffect(() => {
-    // Charger le script Twitch
     const script = document.createElement("script");
-    script.src = "https://embed.twitch.tv/embed/v1.js";
+    script.src = "https://player.twitch.tv/js/embed/v1.js";
     script.async = true;
     script.onload = () => {
-      // Vérifier que le script Twitch est chargé
       if (window.Twitch) {
         new window.Twitch.Embed("twitch-embed", {
-          width: 848,
-          height: 480,
-          channel: "shinederu",
-          parent: ["www.shinederu.lol", "shinederu.lol", "172.16.20.11"],
+          width: "100%",
+          height: "100%",
+          channel: "Shinederu", // Remplace par le nom de ta chaîne
+          layout: "video", // Options : "video" ou "video-with-chat"
+          theme: "dark", // Options : "dark" ou "light"
         });
       }
     };
-
-    const container = document.getElementById("twitch-embed-container");
-    if (container) {
-      container.appendChild(script);
-    }
+    document.body.appendChild(script);
 
     return () => {
-      // Nettoyage : supprimer le script si le composant est démonté
-      if (container) {
-        container.innerHTML = ""; // Supprimer le contenu précédent
-      }
+      document.body.removeChild(script);
     };
   }, []);
 
   return (
-    <div id="lecteur-twitch">
-      <div id="twitch-embed-container">
-        <div id="twitch-embed"></div>
+    <div className="flex justify-center items-center">
+      <div className="aspect-video rounded-xl border-4 border-[#6a11cb] mt-6 mb-6 w-5/6">
+        <div id="twitch-embed" className="w-full h-full"></div>
       </div>
     </div>
+
   );
 };
 

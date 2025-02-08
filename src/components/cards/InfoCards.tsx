@@ -2,7 +2,7 @@ const InfoCards = () => {
 
     return (
         <>
-            <div className="pb-8 mb-6 w-11/12 inline-block border-b-2 border-[#6a11cb]">
+            <div className="pb-8 mb-6 w-11/12 inline-block border-b-4 border-[#6b6b6b]">
                 <div className="grid grid-cols-2 gap-8">
                     {/* Bloc 1 : Les Directs */}
                     <div className="flex flex-col items-start bg-[#10101f] p-6 rounded-xl border-2  border-[#6a11cb]">

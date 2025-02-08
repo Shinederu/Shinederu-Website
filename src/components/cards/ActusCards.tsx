@@ -10,7 +10,7 @@ type ActusProps = {
 
 const ActusCards = (props: ActusProps) => {
     return (
-        <div className="grid grid-rows-[auto_1fr_auto_auto] bg-[#10101f] pt-4 pb-4 pr-8 pl-8 rounded-xl border-2 border-[#ececec] h-[26rem]">
+        <div className="grid grid-rows-[auto_1fr_auto_auto] bg-[#10101f] pt-4 pb-4 pr-8 pl-8 rounded-xl border-2 border-[#3eda30] h-[26rem]">
             {/* Titre centré */}
             <Title title={props.title} size={3} />
 

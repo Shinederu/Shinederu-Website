@@ -1,18 +1,18 @@
 declare global {
-    interface Window {
-      Twitch?: {
-        Embed: new (
-          id: string,
-          options: {
-            width: number;
-            height: number;
-            channel: string;
-            parent: string[];
-          }
-        ) => void;
-      };
-    }
+  interface Window {
+    Twitch?: {
+      Embed: new (
+        elementId: string,
+        options: {
+          width: string | number;
+          height: string | number;
+          channel: string;
+          layout?: string;
+          theme?: string;
+        }
+      ) => void;
+    };
   }
-  
-  export {};
-  
+}
+
+export {};
