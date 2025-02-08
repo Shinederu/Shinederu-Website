@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import ModalLogin from "../modals/ModalLogin";
 import { useHttpClient } from "@/shared/hooks/http-hook";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "@/shared/context/AuthContext";
 import ModalError from "../modals/ModalError";
 
@@ -67,13 +67,15 @@ const Header = () => {
         {/* Bouton connexion à droite */}
 
       </header>
-            </div>
-      {errorIsOpen && (
-        <ModalError
-          isOpen={errorIsOpen}
-          message={errorMessage}
-          setIsOpen={setErrorIsOpen}
-        />
+      <div>
+        {errorIsOpen && (
+          <ModalError
+            isOpen={errorIsOpen}
+            message={errorMessage}
+            setIsOpen={setErrorIsOpen}
+          />
+        )}
+      </div>
     </>
   );
 };
