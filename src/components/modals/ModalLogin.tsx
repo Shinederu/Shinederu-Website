@@ -4,6 +4,7 @@ import { useHttpClient } from "@/shared/hooks/http-hook";
 import { AuthContext } from "@/shared/context/AuthContext";
 import ModalError from "./ModalError";
 import ModalConfirm from "./ModalConfirm";
+import Title from "../decoration/Title";
 
 const ModalLogin = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -14,7 +15,6 @@ const ModalLogin = () => {
     const { sendRequest } = useHttpClient();
     const authCtx = useContext(AuthContext);
 
-
     const [formData, setFormData] = useState({
         loginUsername: "",
         loginPassword: "",
@@ -24,55 +24,54 @@ const ModalLogin = () => {
         registerConfirmPassword: "",
     });
 
-
-
     const sendRegister = () => {
-
         if (!formData.registerUsername || !formData.registerMail || !formData.registerPassword || !formData.registerConfirmPassword) {
-            alert("Tous les champs doivent être remplis !");
+            setErrorMessage("Tous les champs doivent être remplis !");
+            setErrorIsOpen(true);
             return;
         }
 
         if (formData.registerPassword !== formData.registerConfirmPassword) {
-            alert("Les mots de passe ne correspondent pas !");
+            setErrorMessage("Les mots de passe ne correspondent pas !");
+            setErrorIsOpen(true);
             return;
         }
 
         sendRequest({
             key: 2,
-            url: import.meta.env.VITE_SHINEDERU_API_URL + '/auth/register',
-            method: 'POST',
+            url: import.meta.env.VITE_SHINEDERU_API_URL + "/auth/register",
+            method: "POST",
             body: {
                 username: formData.registerUsername,
                 email: formData.registerMail,
-                password: formData.registerPassword
+                password: formData.registerPassword,
             },
             headers: { Authorization: authCtx.token },
             onSuccess: () => {
-                setConfirmMessage(`Compte créé, vous pouvez vous connecter !`); // Stocke le message de confirmation
-                setConfirmIsOpen(true); // Ouvre la modale
+                setConfirmMessage(`Compte créé, vous pouvez vous connecter !`);
+                setConfirmIsOpen(true);
             },
             onError: (error) => {
-                setErrorMessage(error); // Stocke le message d'erreur
-                setErrorIsOpen(true); // Ouvre la modale
+                setErrorMessage(error);
+                setErrorIsOpen(true);
             },
         });
     };
 
     const sendLogin = () => {
-
         if (!formData.loginUsername || !formData.loginPassword) {
-            alert("Veuillez entrer un pseudo/email et un mot de passe !");
+            setErrorMessage("Veuillez entrer un pseudo/email ET un mot de passe !");
+            setErrorIsOpen(true);
             return;
         }
 
         sendRequest({
             key: 3,
-            url: import.meta.env.VITE_SHINEDERU_API_URL + '/auth/login',
-            method: 'POST',
+            url: import.meta.env.VITE_SHINEDERU_API_URL + "/auth/login",
+            method: "POST",
             body: {
                 username: formData.loginUsername,
-                password: formData.loginPassword
+                password: formData.loginPassword,
             },
             onSuccess: (data) => {
                 authCtx.setIsLoggedIn(true);
@@ -83,23 +82,20 @@ const ModalLogin = () => {
                 setIsOpen(false);
             },
             onError: (error) => {
-                setErrorMessage(error); // Stocke le message d'erreur
-                setErrorIsOpen(true); // Ouvre la modale
+                setErrorMessage(error);
+                setErrorIsOpen(true);
             },
         });
     };
 
     const sanitizeInput = (input: string) => {
-        return input
-            .trim()
-            .replace(/[<>/'"\\&]/g, '')
-            .replace(/\s+/g, ' ');
+        return input.trim().replace(/[<>/'"\\&]/g, "").replace(/\s+/g, " ");
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
             ...formData,
-            [e.target.name]: sanitizeInput(e.target.value)
+            [e.target.name]: sanitizeInput(e.target.value),
         });
     };
 
@@ -107,27 +103,32 @@ const ModalLogin = () => {
         <>
             {/* Bouton pour ouvrir la modal */}
             <button
-                onClick={() => setIsOpen(true)}            >
+                onClick={() => setIsOpen(true)}
+                className="bg-gradient-to-r from-[#6a11cb] to-[#2575fc] text-white px-4 py-2 rounded-md font-bold transition-transform hover:scale-105"
+            >
                 Connexion/Inscription
             </button>
 
             {/* Modal */}
             {isOpen && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
-                    <div className="bg-white text-black rounded-lg shadow-lg w-full max-w-4xl border border-gray-300">
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-[#10101f] text-white rounded-lg shadow-lg w-11/12 sm:w-4/6 lg:w-3/6 p-6 relative">
                         {/* Header */}
-                        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-300">
-                            <h2 className="text-xl font-bold">Connexion / Inscription</h2>
-                            <button onClick={() => setIsOpen(false)} className="text-gray-600 hover:text-black transition">
+                        <div className="flex justify-end border-b border-gray-700 pb-4">
+                            <button
+                                onClick={() => setIsOpen(false)}
+                                className="text-gray-400 hover:text-white transition"
+                            >
                                 <X size={20} />
                             </button>
                         </div>
 
+
                         {/* Body */}
-                        <div className="p-6 grid grid-cols-2 gap-6">
+                        <div className="py-4 grid grid-cols-1 md:grid-cols-2 gap-6">
                             {/* Connexion */}
-                            <div className="bg-slate-100 p-4 rounded-md">
-                                <h3 className="text-lg font-semibold mb-4">Connexion</h3>
+                            <div className="rounded-xl border-2  border-[#5120c2] p-8">
+                                <Title size={2} title="Connexion" />
                                 <form>
                                     <input
                                         type="text"
@@ -135,21 +136,22 @@ const ModalLogin = () => {
                                         placeholder="Pseudo ou Email"
                                         value={formData.loginUsername}
                                         onChange={handleChange}
-                                        className="w-full p-2 border rounded mb-2" />
+                                        className="w-full p-3 border border-gray-700 rounded bg-[#202020] text-white mb-2"
+                                    />
                                     <input
                                         type="password"
                                         name="loginPassword"
                                         placeholder="Mot de passe"
                                         value={formData.loginPassword}
                                         onChange={handleChange}
-                                        className="w-full p-2 border rounded mb-4" />
+                                        className="w-full p-3 border border-gray-700 rounded bg-[#202020] text-white mb-4"
+                                    />
                                 </form>
-
                             </div>
 
                             {/* Inscription */}
-                            <div className="bg-slate-100 p-4 rounded-md">
-                                <h3 className="text-lg font-semibold mb-4">Inscription</h3>
+                            <div className="rounded-xl border-2  border-[#20c228] p-8">
+                                <Title size={2} title="Inscription" />
                                 <form>
                                     <input
                                         type="text"
@@ -157,43 +159,57 @@ const ModalLogin = () => {
                                         placeholder="Pseudo"
                                         value={formData.registerUsername}
                                         onChange={handleChange}
-                                        className="w-full p-2 border rounded mb-2" />
+                                        className="w-full p-3 border border-gray-700 rounded bg-[#202020] text-white mb-2"
+                                    />
                                     <input
                                         type="email"
                                         name="registerMail"
                                         placeholder="Email"
                                         value={formData.registerMail}
                                         onChange={handleChange}
-                                        className="w-full p-2 border rounded mb-2" />
+                                        className="w-full p-3 border border-gray-700 rounded bg-[#202020] text-white mb-2"
+                                    />
                                     <input
                                         type="password"
                                         name="registerPassword"
                                         placeholder="Mot de passe"
                                         value={formData.registerPassword}
                                         onChange={handleChange}
-                                        className="w-full p-2 border rounded mb-2" />
+                                        className="w-full p-3 border border-gray-700 rounded bg-[#202020] text-white mb-2"
+                                    />
                                     <input
                                         type="password"
                                         name="registerConfirmPassword"
                                         placeholder="Confirmer le mot de passe"
                                         value={formData.registerConfirmPassword}
                                         onChange={handleChange}
-                                        className="w-full p-2 border rounded mb-4" />
+                                        className="w-full p-3 border border-gray-700 rounded bg-[#202020] text-white mb-4"
+                                    />
                                 </form>
-
                             </div>
                         </div>
 
                         {/* Footer */}
-                        <div className="p-6 grid grid-cols-2 gap-6">
-                            <button type="submit" onClick={sendLogin} className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition">Se connecter</button>
-                            <button type="submit" onClick={sendRegister} className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">S'inscrire</button>
+                        <div className="pr-4 pl-4 grid grid-cols-2 gap-16">
+                            <button
+                                type="submit"
+                                onClick={sendLogin}
+                                className="bg-gradient-to-r bg-[#6a11cb] text-white px-4 py-2 rounded-md font-bold hover:scale-105 transition-transform"
+                            >
+                                Se connecter
+                            </button>
+                            <button
+                                type="submit"
+                                onClick={sendRegister}
+                                className="bg-gradient-to-r bg-[#11cb5f] text-white px-4 py-2 rounded-md font-bold hover:scale-105 transition-transform"
+                            >
+                                S'inscrire
+                            </button>
                         </div>
                     </div>
                 </div>
-
-
             )}
+
             {errorIsOpen && (
                 <ModalError
                     isOpen={errorIsOpen}
@@ -208,8 +224,6 @@ const ModalLogin = () => {
                     setIsOpen={setConfirmIsOpen}
                 />
             )}
-
-
         </>
     );
 };

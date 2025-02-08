@@ -9,6 +9,7 @@ declare global {
           channel: string;
           layout?: string;
           theme?: string;
+          parent?: [string];
         }
       ) => void;
     };

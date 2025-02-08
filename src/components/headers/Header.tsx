@@ -46,27 +46,38 @@ const Header = () => {
           <Link to="/">Shinederu.lol</Link>
         </h1>
 
-        {/* Navbar parfaitement centrée */}
-        <nav className="flex justify-center bg-[#1a1a1a] py-4 shadow-md">
-          <Link className="text-white mx-5 text-lg transition-colors duration-300 hover:text-[#6a11cb]" to="/">Accueil</Link>
-          <Link className="text-white mx-5 text-lg transition-colors duration-300 hover:text-[#6a11cb]" to="/channels">Streaming</Link>
-          <Link className="text-white mx-5 text-lg transition-colors duration-300 hover:text-[#6a11cb]" to="/community">Communauté</Link>
-          <Link className="text-white mx-5 text-lg transition-colors duration-300 hover:text-[#6a11cb]" to="/aboutme">À Propos</Link>
-          <div>
-            {authCtx.isLoggedIn === true ? (
-              <button onClick={sendLogout}>
-                se déconnecter
+        {/* Navbar avec les liens centrés et le bouton à droite */}
+        <nav className="flex items-center justify-between bg-[#1a1a1a] py-7 px-6">
+          {/* Conteneur des liens de navigation */}
+          <div className="absolute left-1/2 -translate-x-1/2 flex space-x-10">
+            <Link className="text-white text-lg transition-colors duration-300 hover:text-[#6a11cb]" to="/">Accueil</Link>
+            <Link className="text-white text-lg transition-colors duration-300 hover:text-[#6a11cb]" to="/channels">Les Chaînes</Link>
+            <Link className="text-white text-lg transition-colors duration-300 hover:text-[#6a11cb]" to="/community">Communauté</Link>
+            <Link className="text-white text-lg transition-colors duration-300 hover:text-[#6a11cb]" to="/aboutme">À Propos</Link>
+          </div>
+
+          {/* Bouton connexion à droite */}
+          <div className="absolute right-6">
+            {authCtx.isLoggedIn ? (
+              <button onClick={sendLogout} className="text-white text-lg transition hover:text-[#cb1111]">
+                Se déconnecter
               </button>
             ) : (
               <ModalLogin />
             )}
-
           </div>
         </nav>
 
-        {/* Bouton connexion à droite */}
-
+        {/* Modal Error */}
+        {errorIsOpen && (
+          <ModalError
+            isOpen={errorIsOpen}
+            message={errorMessage}
+            setIsOpen={setErrorIsOpen}
+          />
+        )}
       </header>
+
       <div>
         {errorIsOpen && (
           <ModalError

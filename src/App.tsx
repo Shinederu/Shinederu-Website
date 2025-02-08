@@ -52,15 +52,13 @@ const App = () => {
     <div className="bg-[#0d0d0d] text-white font-[Poppins] min-h-screen flex flex-col">
       <Header />
       <main className="w-11/12 mx-auto my-10 p-8 bg-[#1e1e1e] rounded-lg shadow-lg text-center flex-grow">
-        <div>
-          {errorIsOpen && (
-            <ModalError
-              isOpen={errorIsOpen}
-              message={errorMessage}
-              setIsOpen={setErrorIsOpen}
-            />
-          )}
-        </div>
+        {errorIsOpen && (
+          <ModalError
+            isOpen={errorIsOpen}
+            message={errorMessage}
+            setIsOpen={setErrorIsOpen}
+          />
+        )}
         <Routes>{getRoutes(authCtx.permission)}</Routes>
       </main>
       <Footer />

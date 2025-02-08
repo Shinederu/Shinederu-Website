@@ -13,6 +13,7 @@ const TwitchEmbed = () => {
           channel: "Shinederu", // Remplace par le nom de ta chaîne
           layout: "video", // Options : "video" ou "video-with-chat"
           theme: "dark", // Options : "dark" ou "light"
+          parent: [window.location.hostname]
         });
       }
     };
