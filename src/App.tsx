@@ -3,16 +3,16 @@ import { getRoutes } from "./utils/routes";
 import Header from "./components/headers/Header";
 import Footer from "./components/footers/Footer";
 import { useHttpClient } from "./shared/hooks/http-hook";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "./shared/context/AuthContext";
-import ModalError from "./components/modals/ModalError";
+import { ModalContext, ModalProvider } from "./shared/context/ModalContext";
+import MessageModal from "./components/modals/ModalMessage";
 
 const App = () => {
 
   const { sendRequest } = useHttpClient();
   const authCtx = useContext(AuthContext);
-  const [errorIsOpen, setErrorIsOpen] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const modalCtx = useContext(ModalContext);
 
 
   useEffect(() => {
@@ -35,8 +35,9 @@ const App = () => {
             }
           },
           onError: () => {
-            setErrorMessage("Impossible de contacter le serveur... Réessayer plus tard !"); // Stocke le message d'erreur
-            setErrorIsOpen(true); // Ouvre la modale
+            modalCtx.setMessage("Impossible de contacter le serveur... Réessayer plus tard !");
+            modalCtx.setType("error");
+            modalCtx.setIsOpen(true);
           },
         });
       } catch (error) {
@@ -49,20 +50,16 @@ const App = () => {
 
 
   return (
-    <div className="bg-[#0d0d0d] text-white font-[Poppins] min-h-screen flex flex-col">
-      <Header />
-      <main className="w-11/12 mx-auto my-10 p-8 bg-[#1e1e1e] rounded-lg shadow-lg text-center flex-grow">
-        {errorIsOpen && (
-          <ModalError
-            isOpen={errorIsOpen}
-            message={errorMessage}
-            setIsOpen={setErrorIsOpen}
-          />
-        )}
-        <Routes>{getRoutes(authCtx.permission)}</Routes>
-      </main>
-      <Footer />
-    </div>
+    <ModalProvider>
+      <div className="bg-[#0d0d0d] text-white font-[Poppins] min-h-screen flex flex-col">
+        <Header />
+        <main className="w-11/12 mx-auto my-10 p-8 bg-[#1e1e1e] rounded-lg shadow-lg text-center flex-grow">
+          <Routes>{getRoutes(authCtx.permission)}</Routes>
+        </main>
+        <Footer />
+      </div>
+      <MessageModal />
+    </ModalProvider>
   );
 
 };

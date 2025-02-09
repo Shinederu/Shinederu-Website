@@ -1,16 +1,15 @@
 import { Link } from "react-router-dom";
 import ModalLogin from "../modals/ModalLogin";
 import { useHttpClient } from "@/shared/hooks/http-hook";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { AuthContext } from "@/shared/context/AuthContext";
-import ModalError from "../modals/ModalError";
+import { ModalContext } from "@/shared/context/ModalContext";
 
 const Header = () => {
 
   const { sendRequest } = useHttpClient();
   const authCtx = useContext(AuthContext);
-  const [errorIsOpen, setErrorIsOpen] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const modalCtx = useContext(ModalContext);
 
 
   const sendLogout = async () => {
@@ -29,8 +28,9 @@ const Header = () => {
           authCtx.setPermission(0);
         },
         onError: (error) => {
-          setErrorMessage(error); // Stocke le message d'erreur
-          setErrorIsOpen(true); // Ouvre la modale
+          modalCtx.setMessage(error);
+          modalCtx.setType("error");
+          modalCtx.setIsOpen(true);
         },
 
       });
@@ -69,24 +69,7 @@ const Header = () => {
         </nav>
 
         {/* Modal Error */}
-        {errorIsOpen && (
-          <ModalError
-            isOpen={errorIsOpen}
-            message={errorMessage}
-            setIsOpen={setErrorIsOpen}
-          />
-        )}
       </header>
-
-      <div>
-        {errorIsOpen && (
-          <ModalError
-            isOpen={errorIsOpen}
-            message={errorMessage}
-            setIsOpen={setErrorIsOpen}
-          />
-        )}
-      </div>
     </>
   );
 };
