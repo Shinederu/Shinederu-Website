@@ -78,11 +78,14 @@ const ModalLogin = () => {
                 password: formData.loginPassword,
             },
             onSuccess: (data) => {
-                authCtx.setIsLoggedIn(true);
-                authCtx.setMail(data.user.email);
-                authCtx.setPseudo(data.user.username);
-                authCtx.setPk(data.user.pk);
-                authCtx.setToken(data.token);
+                authCtx.setAuthData({
+                    isLoggedIn: true,
+                    mail: data.user.email,
+                    pseudo: data.user.username,
+                    pk: data.user.pk,
+                    permission: data.user.permission,
+                    token: data.token,
+                });
                 setIsOpen(false);
             },
             onError: (error) => {

@@ -1,18 +1,16 @@
 import { createContext, PropsWithChildren, useState } from 'react';
 
-interface AuthContextType {
+type AuthDataType = {
     isLoggedIn: boolean;
     permission: number;
     token: string;
     pk: number;
     pseudo: string;
     mail: string;
-    setIsLoggedIn: (logged: boolean) => void;
-    setPermission: (permission: number) => void;
-    setToken: (token: string) => void;
-    setPk: (pk: number) => void;
-    setPseudo: (pseudo: string) => void;
-    setMail: (mail: string) => void;
+};
+
+interface AuthContextType extends AuthDataType {
+    setAuthData: (authData: Partial<AuthDataType>) => void;
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -22,36 +20,27 @@ export const AuthContext = createContext<AuthContextType>({
     pk: 0,
     pseudo: '',
     mail: '',
-    setIsLoggedIn: () => { },
-    setPermission: () => { },
-    setToken: () => { },
-    setPk: () => { },
-    setPseudo: () => { },
-    setMail: () => { }
+    setAuthData: () => { },
 });
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
+    const [authData, setAuthData] = useState<AuthDataType>({
+        isLoggedIn: false,
+        permission: 0,
+        token: '',
+        pk: 0,
+        pseudo: '',
+        mail: '',
+    });
 
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-    const [permission, setPermission] = useState<number>(0);
-    const [token, setToken] = useState<string>('');
-    const [pk, setPk] = useState<number>(0);
-    const [pseudo, setPseudo] = useState<string>('');
-    const [mail, setMail] = useState<string>('');
+    // Fonction qui met à jour seulement les champs nécessaires
+    const updateAuthData = (newData: Partial<AuthDataType>) => {
+        setAuthData((prev) => ({ ...prev, ...newData }));
+    };
 
     const contextValue: AuthContextType = {
-        isLoggedIn,
-        setIsLoggedIn,
-        permission,
-        setPermission,
-        token,
-        setToken,
-        pk,
-        setPk,
-        pseudo,
-        setPseudo,
-        mail,
-        setMail
+        ...authData, // Déstructure authData pour inclure toutes les valeurs directement
+        setAuthData: updateAuthData, // Utilise la fonction de mise à jour
     };
 
     return (

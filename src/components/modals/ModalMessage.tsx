@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { X } from "lucide-react";
 import Title from "../decoration/Title";
 import { ModalContext } from "@/shared/context/ModalContext";
@@ -8,16 +8,32 @@ const MessageModal = () => {
 
     if (!modalCtx.isOpen) return null;
 
+    const [color, setColor] = useState<string>("");
+    const [title, setTitle] = useState<string>("");
+
+    useEffect(() => {
+        switch (modalCtx.type) {
+            case "confirm":
+                setTitle("Confirmation");
+                setColor("#20c70e"); // Rouge foncé
+                break;
+            case "error":
+                setTitle("Une erreur est survenue !");
+                setColor("#b50909"); // Vert
+                break;
+            default:
+                setTitle("Information");
+                setColor("#ffe342"); // Jaune
+                break;
+        }
+    }, [modalCtx.type]);
+
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-[#10101f] text-white rounded-lg shadow-lg w-11/12 sm:w-96 p-6 relative">
+            <div className="bg-[#10101f] text-white rounded-lg p-6 max-w-7xl border" style={{ borderColor: color }}>
                 {/* Header */}
-                <div className="flex justify-between items-center border-b border-gray-700 pb-4">
-                    {modalCtx.type === "error" ? (
-                        <Title size={2} title="Une erreur est survenue !" />
-                    ) : (
-                        <h2 className="text-xl font-bold">Confirmation</h2>
-                    )}
+                <div className="flex justify-between items-center border-b pb-1 mb-1 gap-6" style={{ borderColor: color }}>
+                    <Title size={2} title={title} />
                     <button onClick={() => modalCtx.setIsOpen(false)} className="text-gray-400 hover:text-white transition">
                         <X size={20} />
                     </button>
@@ -35,16 +51,14 @@ const MessageModal = () => {
                             modalCtx.setIsOpen(false);
                             if (modalCtx.onClose) modalCtx.onClose();
                         }}
-                        className={`bg-gradient-to-r ${modalCtx.type === "error"
-                            ? "from-[#6a11cb] to-[#2575fc]"
-                            : "from-[#11cb5f] to-[#0ba34c]"
-                            } text-white py-2 px-4 rounded-md font-semibold shadow-md hover:scale-105 transition-transform`}
+                        className={`text-white py-2 px-4 rounded-md font-semibold shadow-md hover:scale-105 transition-transform`}
+                        style={{ backgroundColor: color }}
                     >
-                        Fermer
+                        Compris !
                     </button>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 
