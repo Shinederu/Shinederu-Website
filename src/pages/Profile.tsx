@@ -1,7 +1,7 @@
 import { useEffect, useContext, useState } from "react";
 import { useHttpClient } from "@/shared/hooks/http-hook";
 import { AuthContext } from "@/shared/context/AuthContext";
-import ModalError from "@/components/modals/ModalError";
+import { ModalContext } from "@/shared/context/ModalContext";
 
 // Définition du type pour le profil utilisateur
 interface User {
@@ -18,10 +18,9 @@ interface User {
 const Profile = () => {
     const { sendRequest, isLoading } = useHttpClient();
     const authCtx = useContext(AuthContext);
+    const modalCtx = useContext(ModalContext);
 
     const [user, setUser] = useState<User | null>(null);
-    const [errorIsOpen, setErrorIsOpen] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(() => {
         const fetchUserProfile = async () => {
@@ -34,8 +33,9 @@ const Profile = () => {
                     setUser(data);
                 },
                 onError: (error) => {
-                    setErrorMessage(error);
-                    setErrorIsOpen(true);
+                    modalCtx.setMessage(error);
+                    modalCtx.setType("error");
+                    modalCtx.setIsOpen(true);
                 },
             });
         };
@@ -84,13 +84,6 @@ const Profile = () => {
                     </div>
                 </div>
             </div>
-            {errorIsOpen && (
-                <ModalError
-                    isOpen={errorIsOpen}
-                    message={errorMessage}
-                    setIsOpen={setErrorIsOpen}
-                />
-            )}
         </>
     );
 };

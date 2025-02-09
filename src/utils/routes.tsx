@@ -4,12 +4,13 @@ import Community from "@/pages/Community";
 import Dashboard from "@/pages/Dashboard";
 import Homepage from "@/pages/Homepage";
 import Profile from "@/pages/Profile";
-import { Route } from "react-router-dom";
+import { Navigate, Route } from "react-router-dom";
 
 
 //Routes autorisées pour les anonymes
 const anonymous = () => (
     <>
+        <Route path="*" element={<Navigate to="/" replace />} /> {/*Redirection pour les routes non-autorisées & inconnue */}
         <Route path="/" element={<Homepage />} />
         <Route path="/channels" element={<Channels />} />
         <Route path="/community" element={<Community />} />

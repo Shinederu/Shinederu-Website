@@ -2,16 +2,15 @@ import { useContext, useState } from "react";
 import { X } from "lucide-react"; // Icône de croix pour fermer
 import { useHttpClient } from "@/shared/hooks/http-hook";
 import { AuthContext } from "@/shared/context/AuthContext";
-import ModalError from "./ModalError";
-import ModalConfirm from "./ModalConfirm";
 import Title from "../decoration/Title";
+import { ModalContext } from "@/shared/context/ModalContext";
 
 const ModalLogin = () => {
+
+    const modalCtx = useContext(ModalContext);
+
+
     const [isOpen, setIsOpen] = useState(false);
-    const [errorIsOpen, setErrorIsOpen] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
-    const [confirmIsOpen, setConfirmIsOpen] = useState(false);
-    const [confirmMessage, setConfirmMessage] = useState("");
     const { sendRequest } = useHttpClient();
     const authCtx = useContext(AuthContext);
 
@@ -26,14 +25,16 @@ const ModalLogin = () => {
 
     const sendRegister = () => {
         if (!formData.registerUsername || !formData.registerMail || !formData.registerPassword || !formData.registerConfirmPassword) {
-            setErrorMessage("Tous les champs doivent être remplis !");
-            setErrorIsOpen(true);
+            modalCtx.setMessage("Tous les champs doivent être remplis !");
+            modalCtx.setType("error");
+            modalCtx.setIsOpen(true);
             return;
         }
 
         if (formData.registerPassword !== formData.registerConfirmPassword) {
-            setErrorMessage("Les mots de passe ne correspondent pas !");
-            setErrorIsOpen(true);
+            modalCtx.setMessage("Les mots de passe ne correspondent pas !");
+            modalCtx.setType("error");
+            modalCtx.setIsOpen(true);
             return;
         }
 
@@ -48,20 +49,23 @@ const ModalLogin = () => {
             },
             headers: { Authorization: authCtx.token },
             onSuccess: () => {
-                setConfirmMessage(`Compte créé, vous pouvez vous connecter !`);
-                setConfirmIsOpen(true);
+                modalCtx.setMessage("Compte créé, vous pouvez vous connecter !");
+                modalCtx.setType("confirm");
+                modalCtx.setIsOpen(true);
             },
             onError: (error) => {
-                setErrorMessage(error);
-                setErrorIsOpen(true);
+                modalCtx.setMessage(error);
+                modalCtx.setType("error");
+                modalCtx.setIsOpen(true);
             },
         });
     };
 
     const sendLogin = () => {
         if (!formData.loginUsername || !formData.loginPassword) {
-            setErrorMessage("Veuillez entrer un pseudo/email ET un mot de passe !");
-            setErrorIsOpen(true);
+            modalCtx.setMessage("Veuillez entrer un pseudo/email ET un mot de passe !");
+            modalCtx.setType("error");
+            modalCtx.setIsOpen(true);
             return;
         }
 
@@ -74,16 +78,20 @@ const ModalLogin = () => {
                 password: formData.loginPassword,
             },
             onSuccess: (data) => {
-                authCtx.setIsLoggedIn(true);
-                authCtx.setMail(data.user.email);
-                authCtx.setPseudo(data.user.username);
-                authCtx.setPk(data.user.pk);
-                authCtx.setToken(data.token);
+                authCtx.setAuthData({
+                    isLoggedIn: true,
+                    mail: data.user.email,
+                    pseudo: data.user.username,
+                    pk: data.user.pk,
+                    permission: data.user.permission,
+                    token: data.token,
+                });
                 setIsOpen(false);
             },
             onError: (error) => {
-                setErrorMessage(error);
-                setErrorIsOpen(true);
+                modalCtx.setMessage(error);
+                modalCtx.setType("error");
+                modalCtx.setIsOpen(true);
             },
         });
     };
@@ -208,21 +216,6 @@ const ModalLogin = () => {
                         </div>
                     </div>
                 </div>
-            )}
-
-            {errorIsOpen && (
-                <ModalError
-                    isOpen={errorIsOpen}
-                    message={errorMessage}
-                    setIsOpen={setErrorIsOpen}
-                />
-            )}
-            {confirmIsOpen && (
-                <ModalConfirm
-                    isOpen={confirmIsOpen}
-                    message={confirmMessage}
-                    setIsOpen={setConfirmIsOpen}
-                />
             )}
         </>
     );
