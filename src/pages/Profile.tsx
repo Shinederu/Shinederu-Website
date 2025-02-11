@@ -57,6 +57,25 @@ const Profile = () => {
 
 
     const updateUserProfile = async () => {
+
+        if (!editedUser.username || !editedUser.email) {
+            modalCtx.setMessage("Le Pseudo et l'Email sont obligatoire !");
+            modalCtx.setType("error");
+            modalCtx.setIsOpen(true);
+            return;
+        }
+
+        // Vérification du format de l'email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(editedUser.email)) {
+            modalCtx.setMessage("L'adresse email n'est pas valide !");
+            modalCtx.setType("error");
+            modalCtx.setIsOpen(true);
+            return;
+        }
+
+
+
         sendRequest({
             key: 5,
             url: import.meta.env.VITE_SHINEDERU_API_URL + "/auth/editProfile",
@@ -67,6 +86,9 @@ const Profile = () => {
                 modalCtx.setMessage(data.message);
                 modalCtx.setType("confirm");
                 modalCtx.setIsOpen(true);
+                authCtx.setAuthData({
+                    token: data.token,
+                });
                 setUser(editedUser);
                 setIsEditMode(false);
             },
@@ -79,18 +101,31 @@ const Profile = () => {
     };
 
     const changePassword = async () => {
+
+        if (!passwordForm.newPassword || !passwordForm.confirmNewPassword || !passwordForm.currentPassword) {
+            modalCtx.setMessage("Tous les champs doivent être remplis !");
+            modalCtx.setType("error");
+            modalCtx.setIsOpen(true);
+            return;
+        }
+
+        if (passwordForm.newPassword !== passwordForm.confirmNewPassword) {
+            modalCtx.setMessage("Les mots de passe ne correspondent pas !");
+            modalCtx.setType("error");
+            modalCtx.setIsOpen(true);
+            return;
+        }
+
         sendRequest({
             key: 5,
-            url: import.meta.env.VITE_SHINEDERU_API_URL + "/auth/editProfile",
+            url: import.meta.env.VITE_SHINEDERU_API_URL + "/auth/changePassword",
             method: "POST",
             headers: { Authorization: authCtx.token },
-            body: editedUser,
+            body: passwordForm,
             onSuccess: (data) => {
                 modalCtx.setMessage(data.message);
                 modalCtx.setType("confirm");
                 modalCtx.setIsOpen(true);
-                setUser(editedUser);
-                setIsEditMode(false);
             },
             onError: (error) => {
                 modalCtx.setMessage(error);
@@ -101,7 +136,10 @@ const Profile = () => {
     };
 
     const handleChange = (e: any) => {
-        setEditedUser({ ...editedUser, [e.target.name]: e.target.value });
+        setEditedUser({ ...editedUser, [e.target.name]: e.target.value.trim().replace(/[<>/'"\\&]/g, "").replace(/\s+/g, " ") });
+    };
+    const handleChangePassword = (e: any) => {
+        setPasswordForm({ ...passwordForm, [e.target.name]: e.target.value.trim().replace(/[<>/'"\\&]/g, "").replace(/\s+/g, " ") });
     };
 
     // Fonction pour formater la date
@@ -192,7 +230,7 @@ const Profile = () => {
                             </button>
 
                             <button
-                                onClick={() => { updateUserProfile(); setIsEditMode(false); }}
+                                onClick={() => { updateUserProfile() }}
                                 className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition mt-4">
                                 Enregistrer
                             </button>
@@ -239,8 +277,8 @@ const Profile = () => {
                                 type="password"
                                 name="currentPassword"
                                 placeholder="Mot de passe actuel"
-                                value={""}
-                                onChange={handleChange}
+                                value={passwordForm.currentPassword}
+                                onChange={handleChangePassword}
                                 className="w-full p-3 border border-gray-700 rounded bg-[#202020]  mb-2"
                             />
                         </div>
@@ -250,8 +288,8 @@ const Profile = () => {
                                 type="password"
                                 name="newPassword"
                                 placeholder="Nouveau mot de passe"
-                                value={""}
-                                onChange={handleChange}
+                                value={passwordForm.newPassword}
+                                onChange={handleChangePassword}
                                 className="w-full p-3 border border-gray-700 rounded bg-[#202020]  mb-2"
                             />
                         </div>
@@ -259,15 +297,15 @@ const Profile = () => {
                             <label className="font-semibold">Confirmer le mot de passe:</label>
                             <input
                                 type="password"
-                                name="ConfirmNewPassword"
+                                name="confirmNewPassword"
                                 placeholder="Confirmer le mot de passe"
-                                value={""}
-                                onChange={handleChange}
+                                value={passwordForm.confirmNewPassword}
+                                onChange={handleChangePassword}
                                 className="w-full p-3 border border-gray-700 rounded bg-[#202020]  mb-4"
                             />
                         </div>
                         <button
-                            onClick={() => setIsEditMode(true)}
+                            onClick={() => changePassword()}
                             className="bg-red-600 px-4 py-2 rounded hover:bg-red-700 transition">
                             Modifier
                         </button>

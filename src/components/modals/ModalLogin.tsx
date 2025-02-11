@@ -31,6 +31,15 @@ const ModalLogin = () => {
             return;
         }
 
+        // Vérification du format de l'email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.registerMail)) {
+            modalCtx.setMessage("L'adresse email n'est pas valide !");
+            modalCtx.setType("error");
+            modalCtx.setIsOpen(true);
+            return;
+        }
+
         if (formData.registerPassword !== formData.registerConfirmPassword) {
             modalCtx.setMessage("Les mots de passe ne correspondent pas !");
             modalCtx.setType("error");
@@ -96,14 +105,10 @@ const ModalLogin = () => {
         });
     };
 
-    const sanitizeInput = (input: string) => {
-        return input.trim().replace(/[<>/'"\\&]/g, "").replace(/\s+/g, " ");
-    };
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
             ...formData,
-            [e.target.name]: sanitizeInput(e.target.value),
+            [e.target.name]: e.target.value.trim().replace(/[<>/'"\\&]/g, "").replace(/\s+/g, " "),
         });
     };
 
