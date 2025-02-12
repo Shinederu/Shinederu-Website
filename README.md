@@ -1,1 +1,1 @@
-# Shinederu.lol version 0.2.1
+# Shinederu.lol version 0.2.2
