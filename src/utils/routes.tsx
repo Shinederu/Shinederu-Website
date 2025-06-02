@@ -3,7 +3,9 @@ import Channels from "@/pages/Channels";
 import Community from "@/pages/Community";
 import Dashboard from "@/pages/Dashboard";
 import Homepage from "@/pages/Homepage";
+import NewsManager from "@/pages/NewsManager";
 import Profile from "@/pages/Profile";
+import UserManager from "@/pages/UserManager";
 import { Navigate, Route } from "react-router-dom";
 
 
@@ -28,8 +30,19 @@ const logged = () => (
     </>
 )
 
+const admin = () => (
+    <>
+        {logged()}
+        <Route path="/UserManager" element={<UserManager />} />
+        <Route path="/NewsManager" element={<NewsManager />} />
+
+    </>
+)
+
 export const getRoutes = (permission: number) => {
     switch (permission) {
+        case 2: //Cas Administrateur
+            return admin();
         case 1: //Cas utilisateur
             return logged();
         default: //Cas visiteur
