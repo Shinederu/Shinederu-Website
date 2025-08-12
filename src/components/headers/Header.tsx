@@ -13,7 +13,7 @@ const Header = () => {
     <>
       <header>
         <h1 className="bg-gradient-to-r from-[#6a11cb] to-[#2575fc] p-5 text-center text-3xl tracking-wider">
-          {authCtx.isLoggedIn === true ? <Link to="/dashboard">Salutation <b>{authCtx.pseudo}</b> !</Link> : <Link to="/" className="font-bold "> Shinederu.lol</Link>}
+          {authCtx.isLoggedIn === true ? <Link to="/dashboard">Salutation <b>{authCtx.username}</b> !</Link> : <Link to="/" className="font-bold "> Shinederu.lol</Link>}
         </h1>
 
         {/* Navbar avec les liens centrés et le bouton à droite */}

@@ -2,11 +2,11 @@ import { createContext, PropsWithChildren, useState } from 'react';
 
 type AuthDataType = {
     isLoggedIn: boolean;
-    permission: number;
-    token: string;
-    pk: number;
-    pseudo: string;
-    mail: string;
+    id: number;
+    username: string;
+    email: string;
+    role: string;
+    created_at: string;
 };
 
 interface AuthContextType extends AuthDataType {
@@ -15,22 +15,22 @@ interface AuthContextType extends AuthDataType {
 
 export const AuthContext = createContext<AuthContextType>({
     isLoggedIn: false,
-    permission: 0,
-    token: '',
-    pk: 0,
-    pseudo: '',
-    mail: '',
+    id: 0,
+    username: '',
+    email: '',
+    role: '',
+    created_at: '',
     setAuthData: () => { },
 });
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
     const [authData, setAuthData] = useState<AuthDataType>({
         isLoggedIn: false,
-        permission: 0,
-        token: '',
-        pk: 0,
-        pseudo: '',
-        mail: '',
+        id: 0,
+        username: '',
+        email: '',
+        role: '',
+        created_at: '',
     });
 
     // Fonction qui met à jour seulement les champs nécessaires

@@ -25,83 +25,77 @@ const ModalLogin = () => {
 
     const sendRegister = () => {
         if (!formData.registerUsername || !formData.registerMail || !formData.registerPassword || !formData.registerConfirmPassword) {
-            modalCtx.setMessage("Tous les champs doivent être remplis !");
-            modalCtx.setType("error");
-            modalCtx.setIsOpen(true);
-            return;
-        }
-
-        // Vérification du format de l'email
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(formData.registerMail)) {
-            modalCtx.setMessage("L'adresse email n'est pas valide !");
-            modalCtx.setType("error");
-            modalCtx.setIsOpen(true);
-            return;
-        }
-
-        if (formData.registerPassword !== formData.registerConfirmPassword) {
-            modalCtx.setMessage("Les mots de passe ne correspondent pas !");
-            modalCtx.setType("error");
-            modalCtx.setIsOpen(true);
+            modalCtx.open("Tous les champs doivent être remplis !", "error");
             return;
         }
 
         sendRequest({
             key: 2,
-            url: import.meta.env.VITE_SHINEDERU_API_URL + "/auth/register",
+            url: import.meta.env.VITE_SHINEDERU_API_AUTH_URL,
             method: "POST",
             body: {
+                action: "register",
                 username: formData.registerUsername,
                 email: formData.registerMail,
                 password: formData.registerPassword,
             },
-            headers: { Authorization: authCtx.token },
-            onSuccess: () => {
-                modalCtx.setMessage("Compte créé, vous pouvez vous connecter !");
-                modalCtx.setType("confirm");
-                modalCtx.setIsOpen(true);
+            onSuccess: (data) => {
+                modalCtx.open(data.message, "confirm")
             },
             onError: (error) => {
-                modalCtx.setMessage(error);
-                modalCtx.setType("error");
-                modalCtx.setIsOpen(true);
+                modalCtx.open(error, "error");
             },
         });
     };
 
     const sendLogin = () => {
         if (!formData.loginUsername || !formData.loginPassword) {
-            modalCtx.setMessage("Veuillez entrer un pseudo/email ET un mot de passe !");
-            modalCtx.setType("error");
-            modalCtx.setIsOpen(true);
+            modalCtx.open("Veuillez entrer un pseudo/email ET un mot de passe !", "error");
             return;
         }
 
         sendRequest({
             key: 3,
-            url: import.meta.env.VITE_SHINEDERU_API_URL + "/auth/login",
+            url: import.meta.env.VITE_SHINEDERU_API_AUTH_URL,
             method: "POST",
             body: {
+                action: "login",
                 username: formData.loginUsername,
                 password: formData.loginPassword,
             },
-            onSuccess: (data) => {
-                authCtx.setAuthData({
-                    isLoggedIn: true,
-                    mail: data.user.email,
-                    pseudo: data.user.username,
-                    pk: data.user.pk,
-                    permission: data.user.permission,
-                    token: data.token,
+            onSuccess: async () => {
+                await sendRequest({
+                    key: 4,
+                    url: import.meta.env.VITE_SHINEDERU_API_AUTH_URL,
+                    method: 'GET',
+                    body: { action: "me" },
+                    onSuccess: (data) => {
+                        authCtx.setAuthData({
+                            isLoggedIn: true,
+                            id: data.user.id,
+                            username: data.user.username,
+                            email: data.user.email,
+                            role: data.user.role,
+                            created_at: data.created_at,
+                        });
+                    },
+                    onError: () => {
+                        authCtx.setAuthData({
+                            isLoggedIn: false,
+                            id: 0,
+                            username: '',
+                            email: '',
+                            role: '',
+                            created_at: '',
+                        });
+                        modalCtx.open("Erreur lors de la récupération des données utilisateur.", "error");
+                    },
                 });
                 setIsOpen(false);
             },
             onError: (error) => {
-                modalCtx.setMessage(error);
-                modalCtx.setType("error");
-                modalCtx.setIsOpen(true);
-            },
+                modalCtx.open(error, "error");
+            }
         });
     };
 

@@ -28,14 +28,13 @@ const logged = () => (
     </>
 )
 
-export const getRoutes = (permission: number) => {
-    switch (permission) {
-        case 1: //Cas utilisateur
+export const getRoutes = (role: string) => {
+
+    
+    switch (role) {
+        case 'user': //Cas utilisateur
             return logged();
         default: //Cas visiteur
             return anonymous();
     }
-
-
-    return anonymous();
 };

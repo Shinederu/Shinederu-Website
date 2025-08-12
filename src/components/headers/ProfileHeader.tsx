@@ -15,27 +15,27 @@ const ProfileHeader = () => {
         try {
             await sendRequest({
                 key: 3,
-                url: import.meta.env.VITE_SHINEDERU_API_URL + "/auth/logout",
+                url: import.meta.env.VITE_SHINEDERU_API_AUTH_URL,
                 method: "POST",
-                headers: { Authorization: authCtx.token },
+                body: {
+                    action: "logout",
+                },
                 onSuccess: () => {
                     authCtx.setAuthData({
                         isLoggedIn: false,
-                        mail: "",
-                        pseudo: "",
-                        pk: 0,
-                        permission: 0,
-                        token: "",
+                        id: 0,
+                        username: '',
+                        email: '',
+                        role: '',
+                        created_at: '',
                     });
                 },
                 onError: (error) => {
-                    modalCtx.setMessage(error);
-                    modalCtx.setType("error");
-                    modalCtx.setIsOpen(true);
+                    modalCtx.open(error, "error");
                 },
             });
         } catch (error) {
-            alert(`Erreur : ${error}`);
+            modalCtx.open(error + "", "error");
         }
     };
 

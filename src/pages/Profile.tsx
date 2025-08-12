@@ -1,11 +1,14 @@
-import { useEffect, useContext, useState } from "react";
+/*import { useEffect, useContext, useState } from "react";
 import { useHttpClient } from "@/shared/hooks/http-hook";
 import { AuthContext } from "@/shared/context/AuthContext";
 import { ModalContext } from "@/shared/context/ModalContext";
 import Title from "@/components/decoration/Title";
 import { ChangePasswordType, UserType } from "@/types/User";
+*/
 
 const Profile = () => {
+
+    /*
     const { sendRequest, isLoading } = useHttpClient();
     const authCtx = useContext(AuthContext);
     const modalCtx = useContext(ModalContext);
@@ -314,6 +317,8 @@ const Profile = () => {
             </div >
         </>
     );
+    */
+   return <><p>Soon Profile Page</p></>
 };
 
 export default Profile;

@@ -5,51 +5,42 @@ import Footer from "./components/footers/Footer";
 import { useHttpClient } from "./shared/hooks/http-hook";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "./shared/context/AuthContext";
-import { ModalContext } from "./shared/context/ModalContext";
 
 const App = () => {
 
   const { sendRequest } = useHttpClient();
   const authCtx = useContext(AuthContext);
-  const modalCtx = useContext(ModalContext);
 
 
   useEffect(() => {
     const sendIsConnected = async () => {
-      try {
-        await sendRequest({
-          key: 3,
-          url: import.meta.env.VITE_SHINEDERU_API_URL + '/auth/isConnected',
-          method: 'GET',
-          onSuccess: (data) => {
-            if (data.connected) {
-
-              authCtx.setAuthData({
-                isLoggedIn: true,
-                mail: data.user.email,
-                pseudo: data.user.username,
-                pk: data.user.pk,
-                permission: data.user.permission,
-                token: data.token,
-              });
-
-            } else {
-              authCtx.setAuthData({
-                isLoggedIn: false,
-              });
-            }
-          },
-          onError: () => {
-            modalCtx.setMessage("Impossible de contacter le serveur... Réessayer plus tard !");
-            modalCtx.setType("error");
-            modalCtx.setIsOpen(true);
-          },
-        });
-      } catch (error) {
-        console.error("Erreur lors de la vérification de la connexion :", error);
-      }
+      await sendRequest({
+        key: 3,
+        url: import.meta.env.VITE_SHINEDERU_API_AUTH_URL,
+        method: 'GET',
+        body: { action: "me" },
+        onSuccess: (data) => {
+          authCtx.setAuthData({
+            isLoggedIn: true,
+            id: data.user.id,
+            username: data.user.username,
+            email: data.user.email,
+            role: data.user.role,
+            created_at: data.created_at,
+          });
+        },
+        onError: () => {
+          authCtx.setAuthData({
+            isLoggedIn: false,
+            id: 0,
+            username: '',
+            email: '',
+            role: '',
+            created_at: '',
+          });
+        },
+      });
     };
-
     sendIsConnected();
   }, []);
 
@@ -59,7 +50,7 @@ const App = () => {
     <div className="bg-[#0d0d0d] text-white font-[Poppins] min-h-screen flex flex-col">
       <Header />
       <main className="w-11/12 mx-auto my-10 p-8 bg-[#1e1e1e] rounded-lg shadow-lg text-center flex-grow">
-        <Routes>{getRoutes(authCtx.permission)}</Routes>
+        <Routes>{getRoutes(authCtx.role)}</Routes>
       </main>
       <Footer />
     </div>
