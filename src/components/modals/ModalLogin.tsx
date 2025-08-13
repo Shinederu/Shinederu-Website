@@ -77,7 +77,7 @@ const ModalLogin = () => {
                             username: data.user.username,
                             email: data.user.email,
                             role: data.user.role,
-                            created_at: data.created_at,
+                            created_at: data.user.created_at,
                         });
                     },
                     onError: () => {
