@@ -49,7 +49,9 @@ const App = () => {
 
     <div className="bg-[#0d0d0d] text-white font-[Poppins] min-h-screen flex flex-col">
       <Header />
-      <main className="w-11/12 mx-auto my-10 p-8 bg-[#1e1e1e] rounded-lg shadow-lg text-center flex-grow">
+      <main
+        className="w-11/12 max-w-[calc(100vh*16/9)] mx-auto my-10 p-8 bg-[#1e1e1e] rounded-lg shadow-lg text-center flex-grow"
+      >
         <Routes>{getRoutes(authCtx.role)}</Routes>
       </main>
       <Footer />
