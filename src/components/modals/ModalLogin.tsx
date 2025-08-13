@@ -38,6 +38,7 @@ const ModalLogin = () => {
                 username: formData.registerUsername,
                 email: formData.registerMail,
                 password: formData.registerPassword,
+                password_confirm: formData.registerConfirmPassword,
             },
             onSuccess: (data) => {
                 modalCtx.open(data.message, "confirm")
