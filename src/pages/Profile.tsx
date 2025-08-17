@@ -85,6 +85,33 @@ const Profile = () => {
         });
     }
 
+    const sendLogOutAll = async () => {
+        await sendRequest({
+            key: 4,
+            url: import.meta.env.VITE_SHINEDERU_API_AUTH_URL,
+            method: 'POST',
+            body: { action: "logoutAll" },
+            onSuccess: () => {
+                window.location.reload();
+            },
+            onError: (error) => {
+                modalCtx.open(error, "error");
+            }
+        });
+    }
+
+
+    const sendDeleteAccount = async (password: string) => {
+        await sendRequest({
+            key: 4,
+            url: import.meta.env.VITE_SHINEDERU_API_AUTH_URL,
+            method: "DELETE",
+            body: { action: "deleteAccount", password: password },
+            onSuccess: () => window.location.reload(),
+            onError: (error) => { modalCtx.open(error, "error"); }
+        });
+    };
+
     return (
         <>
             <Title size={1} title={"Profile de " + authCtx.username} />
@@ -148,6 +175,36 @@ const Profile = () => {
                         </label>
                         <button onClick={sendNewEmailRequest}>Demander le changement</button>
                     </div>
+                    <button
+                        onClick={async () => {
+                            const confirmed = await modalCtx.open(
+                                "Souhaitez-vous réellement vous déconnecter de tous les appareils ?",
+                                "confirm",
+                                "",
+                            )
+                            if (confirmed) {
+                                sendLogOutAll();
+                            }
+                        }
+                        }
+                    >
+                        Se déconnecter de tous les appareils
+                    </button>
+
+                    <button
+                        onClick={async () => {
+                            const value = await modalCtx.open(
+                                "Entrez votre mot de passe pour confirmer la suppression de votre compte.",
+                                "prompt",
+                                "Cette action est irréversible. (laisser vide pour annuler)"
+                            );
+                            if (value && value.trim() !== "") {
+                                await sendDeleteAccount(value);
+                            }
+                        }}
+                    >
+                        Supprimer mon compte
+                    </button>
                 </section>
             </div>
         </>
