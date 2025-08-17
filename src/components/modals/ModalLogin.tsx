@@ -4,6 +4,7 @@ import { useHttpClient } from "@/shared/hooks/http-hook";
 import { AuthContext } from "@/shared/context/AuthContext";
 import Title from "../decoration/Title";
 import { ModalContext } from "@/shared/context/ModalContext";
+import { useNavigate } from "react-router-dom";
 
 const ModalLogin = () => {
 
@@ -13,6 +14,8 @@ const ModalLogin = () => {
     const [isOpen, setIsOpen] = useState(false);
     const { sendRequest } = useHttpClient();
     const authCtx = useContext(AuthContext);
+    const navigate = useNavigate();
+
 
     const [formData, setFormData] = useState({
         loginUsername: "",
@@ -107,6 +110,12 @@ const ModalLogin = () => {
         });
     };
 
+    const forgottedPassword = () => {
+        setIsOpen(false)
+        navigate("/resetPassword");
+    };
+
+
     return (
         <>
             {/* Bouton pour ouvrir la modal */}
@@ -155,6 +164,7 @@ const ModalLogin = () => {
                                         className="w-full p-3 border border-gray-700 rounded bg-[#202020] text-white mb-4"
                                     />
                                 </form>
+                                <button onClick={forgottedPassword} className="text-gray-500">Mot de passe oublié ?</button>
                             </div>
 
                             {/* Inscription */}
@@ -215,7 +225,7 @@ const ModalLogin = () => {
                             </button>
                         </div>
                     </div>
-                </div>
+                </div >
             )}
         </>
     );

@@ -3,7 +3,10 @@ import Channels from "@/pages/Channels";
 import Community from "@/pages/Community";
 import Dashboard from "@/pages/Dashboard";
 import Homepage from "@/pages/Homepage";
+import NewEmail from "@/pages/NewEmail";
+import NewPassword from "@/pages/NewPassword";
 import Profile from "@/pages/Profile";
+import ResetPassword from "@/pages/ResetPassword";
 import { Navigate, Route } from "react-router-dom";
 
 
@@ -15,6 +18,9 @@ const anonymous = () => (
         <Route path="/channels" element={<Channels />} />
         <Route path="/community" element={<Community />} />
         <Route path="/aboutme" element={<AboutMe />} />
+        <Route path="/newPassword" element={<NewPassword />} />
+        <Route path="/newEmail" element={<NewEmail />} />
+        <Route path="/resetPassword" element={<ResetPassword />} />
     </>
 )
 
@@ -30,7 +36,7 @@ const logged = () => (
 
 export const getRoutes = (role: string) => {
 
-    
+
     switch (role) {
         case 'user': //Cas utilisateur
             return logged();

@@ -28,7 +28,6 @@ const App = () => {
             role: data.user.role,
             created_at: data.user.created_at,
           });
-          console.log(authCtx);
         },
         onError: () => {
           authCtx.setAuthData({
