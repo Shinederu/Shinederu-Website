@@ -43,28 +43,52 @@ const NewPassword = () => {
 
     return (
         <>
-            <Title title="Réinitialisation du mot de passe" size={1} />
-            <label>Nouveau mot de passe
-                <input
-                    type="password"
-                    name="new password"
-                    value={newPassword.password}
-                    onChange={(event) => { setNewPassword({ ...newPassword, password: event.target.value }) }}
-                    className="p-3 border border-gray-700 rounded bg-[#202020] text-white mb-2"
-                />
-            </label>
-            <label>Confirmer le mot de passe
-                <input
-                    type="password"
-                    name="confirm password"
-                    value={newPassword.passwordConfirm}
-                    onChange={(event) => { setNewPassword({ ...newPassword, passwordConfirm: event.target.value }) }}
-                    className="p-3 border border-gray-700 rounded bg-[#202020] text-white mb-2"
-                />
-            </label>
-            <button onClick={sumbitNewPassword}>Valider</button>
+            <div className="text-white max-w-md mx-auto mt-10">
+                <Title title="Réinitialisation du mot de passe" size={1} />
 
+                <div className="mt-6 space-y-4">
+                    <div>
+                        <label className="block mb-1 text-sm text-gray-300">
+                            Nouveau mot de passe
+                        </label>
+                        <input
+                            type="password"
+                            name="newPassword"
+                            value={newPassword.password}
+                            onChange={(e) =>
+                                setNewPassword({ ...newPassword, password: e.target.value })
+                            }
+                            className="w-full p-2 border border-gray-700 rounded-md bg-[#202020] text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block mb-1 text-sm text-gray-300">
+                            Confirmer le mot de passe
+                        </label>
+                        <input
+                            type="password"
+                            name="confirmPassword"
+                            value={newPassword.passwordConfirm}
+                            onChange={(e) =>
+                                setNewPassword({ ...newPassword, passwordConfirm: e.target.value })
+                            }
+                            className="w-full p-2 border border-gray-700 rounded-md bg-[#202020] text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        />
+                    </div>
+
+                    <div className="pt-2">
+                        <button
+                            onClick={sumbitNewPassword}
+                            className="w-full px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 transition"
+                        >
+                            Valider
+                        </button>
+                    </div>
+                </div>
+            </div>
         </>
+
     )
 }
 

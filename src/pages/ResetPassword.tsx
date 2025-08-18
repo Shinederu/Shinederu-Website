@@ -34,18 +34,37 @@ const ResetPassword = () => {
 
     return (
         <>
-            <Title title="Demander une réinitialisation du mot de passe" size={1} />
-            <label>Adresse Email</label>
-            <input
-                type="email"
-                name="Email"
-                value={email}
-                placeholder="Entrez votre adresse email"
-                onChange={(event) => { setEmail(event.target.value) }}
-                className="w-full p-3 border border-gray-700 rounded bg-[#202020] text-white mb-2"
-            />
-            <button type="submit" onClick={sendPasswordResetRequest}>Envoyer</button>
+            <div className="text-white max-w-md mx-auto mt-10">
+                <Title title="Demander une réinitialisation du mot de passe" size={1} />
+
+                <div className="mt-6 space-y-4">
+                    <div>
+                        <label className="block mb-1 text-sm text-gray-300">
+                            Adresse Email
+                        </label>
+                        <input
+                            type="email"
+                            name="email"
+                            value={email}
+                            placeholder="Entrez votre adresse email"
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full p-2 border border-gray-700 rounded-md bg-[#202020] text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        />
+                    </div>
+
+                    <div className="pt-2">
+                        <button
+                            type="submit"
+                            onClick={sendPasswordResetRequest}
+                            className="w-full px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 transition"
+                        >
+                            Envoyer
+                        </button>
+                    </div>
+                </div>
+            </div>
         </>
+
     );
 
 }

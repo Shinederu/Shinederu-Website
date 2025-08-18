@@ -44,7 +44,7 @@ const ModalLogin = () => {
                 password_confirm: formData.registerConfirmPassword,
             },
             onSuccess: (data) => {
-                modalCtx.open(data.message, "confirm")
+                modalCtx.open(data.message, "result")
             },
             onError: (error) => {
                 modalCtx.open(error, "error");
