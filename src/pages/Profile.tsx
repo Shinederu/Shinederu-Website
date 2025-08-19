@@ -31,9 +31,7 @@ const Profile = () => {
             method: 'POST',
             body: { action: "updateProfile", username: editedUser.username },
             onSuccess: () => {
-                authCtx.setAuthData({
-                    username: editedUser.username,
-                });
+                authCtx.reload();
             },
             onError: (error) => {
                 editedUser.username = authCtx.username;
@@ -109,12 +107,62 @@ const Profile = () => {
         });
     };
 
+    const onSelectAvatar = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const fd = new FormData();
+        fd.append("action", "updateAvatar");
+        fd.append("file", file, "avatar.png");
+
+        await sendRequest({
+            key: 7,
+            url: import.meta.env.VITE_SHINEDERU_API_AUTH_URL,
+            method: "POST",
+            body: fd,
+            onSuccess: async () => {
+                await authCtx.reload();
+                modalCtx.open("Avatar mis à jour.", "result");
+                e.currentTarget.value = "";
+            },
+            onError: (error) => modalCtx.open(error, "error"),
+        });
+    };
+
     return (
         <>
             <div className="w-5/6 flex items-center justify-center flex-col mx-auto">
                 <Title size={1} title={`Profil de ${authCtx.username}`} />
-
                 {/* Bloc profil */}
+                <section className="mt-8 w-full max-w-2xl text-white">
+                    <div className="mt-4 flex items-center gap-4 flex-col">
+                        <img
+                            key={authCtx.avatar_url}
+                            src={authCtx.avatar_url}
+                            alt="avatar"
+                            className="w-40 h-40 rounded-full object-cover border border-gray-700"
+                        />
+                        {editMode ?
+                            <div>
+                                <input
+                                    id="avatarFile"
+                                    type="file"
+                                    accept="image/png,image/jpeg,image/webp"
+                                    onChange={onSelectAvatar}
+                                    className="hidden"
+                                />
+                                <label
+                                    htmlFor="avatarFile"
+                                    className="inline-block cursor-pointer px-3 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 transition"
+                                >
+                                    Choisir une image
+                                </label>
+                                <p className="mt-2 text-xs text-gray-400">
+                                    PNG, JPEG ou WebP — max 5 Mo.
+                                </p>
+                            </div> : <></>}
+                    </div>
+                </section>
                 <div className="mt-6 space-y-4 text-white">
                     {editMode ? (
                         <div className="space-y-4">
@@ -161,7 +209,7 @@ const Profile = () => {
                                 onClick={() => setEditMode(true)}
                                 className="mt-3 px-3 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 transition"
                             >
-                                Éditer
+                                Modifier mon profile
                             </button>
                         </div>
                     )}

@@ -68,33 +68,7 @@ const ModalLogin = () => {
                 password: formData.loginPassword,
             },
             onSuccess: async () => {
-                await sendRequest({
-                    key: 4,
-                    url: import.meta.env.VITE_SHINEDERU_API_AUTH_URL,
-                    method: 'GET',
-                    body: { action: "me" },
-                    onSuccess: (data) => {
-                        authCtx.setAuthData({
-                            isLoggedIn: true,
-                            id: data.user.id,
-                            username: data.user.username,
-                            email: data.user.email,
-                            role: data.user.role,
-                            created_at: data.user.created_at,
-                        });
-                    },
-                    onError: () => {
-                        authCtx.setAuthData({
-                            isLoggedIn: false,
-                            id: 0,
-                            username: '',
-                            email: '',
-                            role: '',
-                            created_at: '',
-                        });
-                        modalCtx.open("Erreur lors de la récupération des données utilisateur.", "error");
-                    },
-                });
+                authCtx.reload();
                 setIsOpen(false);
             },
             onError: (error) => {

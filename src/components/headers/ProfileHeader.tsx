@@ -27,6 +27,7 @@ const ProfileHeader = () => {
                         username: '',
                         email: '',
                         role: '',
+                        avatar_url: '',
                         created_at: '',
                     });
                 },
