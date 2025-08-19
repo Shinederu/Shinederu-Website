@@ -2,46 +2,16 @@ import { Routes } from "react-router-dom";
 import { getRoutes } from "./utils/routes";
 import Header from "./components/headers/Header";
 import Footer from "./components/footers/Footer";
-import { useHttpClient } from "./shared/hooks/http-hook";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "./shared/context/AuthContext";
 
 const App = () => {
 
-  const { sendRequest } = useHttpClient();
   const authCtx = useContext(AuthContext);
 
 
   useEffect(() => {
-    const sendIsConnected = async () => {
-      await sendRequest({
-        key: 3,
-        url: import.meta.env.VITE_SHINEDERU_API_AUTH_URL,
-        method: 'GET',
-        body: { action: "me" },
-        onSuccess: (data) => {
-          authCtx.setAuthData({
-            isLoggedIn: true,
-            id: data.user.id,
-            username: data.user.username,
-            email: data.user.email,
-            role: data.user.role,
-            created_at: data.user.created_at,
-          });
-        },
-        onError: () => {
-          authCtx.setAuthData({
-            isLoggedIn: false,
-            id: 0,
-            username: '',
-            email: '',
-            role: '',
-            created_at: '',
-          });
-        },
-      });
-    };
-    sendIsConnected();
+    authCtx.reload();
   }, []);
 
 
